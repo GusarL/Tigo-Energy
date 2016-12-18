@@ -9,7 +9,7 @@
     return $rootScope.$new( true ); 
   });
 
-  exampleApp.controller('mainCtrl', ['$scope', 'coords', function($scope, coords){
+  exampleApp.controller('mainCtrl', ['$scope', 'coords', 'mediator', function($scope, coords, mediator){
     // $scope.coords = coords;
     //_______________________________
     // var position;
