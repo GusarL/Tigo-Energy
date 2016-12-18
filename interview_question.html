@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+
+<ul id="source">
+  <li>
+    <p></p>
+    <p></p>
+  </li>
+  <li>
+    <p></p>
+    <p id="sourceChild">This one we have</p>
+    <span></span>
+  </li>
+  <li>
+    <p></p>
+  </li>
+  <li>
+    <p></p>
+  </li>
+</ul>
+
+<ul id="dest">
+	<li>
+		<p></p>
+		<p></p>
+	</li>
+	<li>
+		<p></p>
+		<p id="destinationChild">This one we need</p>
+		<span></span>
+	</li>
+	<li>
+		<p></p>
+	</li>
+	<li>
+		<p></p>
+	</li>
+</ul>
+
+<script>
+(function(){
+  'use strict';
+
+  var destinationChildById,
+      sourceParent,
+      sourceChild,
+      destParent,
+      destChild; 
+  //We have two identical DOM structures: sourceParent and destParent. SourceParent has a sourceChild somewhere inside. Your task is to write a function, which accepts sourceParent, sourceChild and destParent as arguments, analyses their structure and sourceChild's position and returns a DOM element, which sits in the same position of destParent as sourceChild in sourceParent (in our case it's a #destinationChild). Please note that we have no initial knowledge of parents structure, nesting level, existing ids and classes, etc.
+
+  function findChild (sourceParent, sourceChild, destParent) {
+    var selectorList = [],
+        selectorJoined,
+        destParent,
+        childTAG,
+        children,
+        selector,
+        serial,
+        parent,
+        prev;
+ 
+    // while (sourceChild.parentElement !== sourceParent) {
+    while (sourceChild.parentElement !== document.body) {
+      parent = sourceChild.parentElement;
+      childTAG = sourceChild.tagName;
+      children = parent.children;
+
+      [].forEach.call(children, function(elem, i) {
+        if (elem == sourceChild) {
+          serial = ++i;
+        }
+      });
+
+      selector = childTAG.toLowerCase() + ':nth-child(' + serial + ')';
+      selectorList.unshift(selector);
+
+      sourceChild = parent;
+    }
+    selectorJoined = selectorList.join('>');
+    destChild = destParent.querySelector(selectorJoined);
+
+    return destChild; // DOM node
+  }
+  
+  sourceParent = document.getElementById('source');
+  destParent = document.getElementById('dest');
+  sourceChild = document.getElementById('sourceChild');
+
+  destChild = findChild (sourceParent, sourceChild, destParent);
+
+  destinationChildById = document.getElementById('destinationChild');
+  console.info('Found child: ', destChild === destinationChildById);
+
+}());
+
+</script>
+
+
+</body>
+</html>
